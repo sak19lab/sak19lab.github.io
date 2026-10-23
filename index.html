@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ja" data-look="film">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="理科が苦手なキミのための実験室。動画・ドリル・プリントで、つまずいたところからじっくり。">
+<title>Kimi to Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&family=Zen+Maru+Gothic:wght@500;700;900&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+html{color-scheme:light}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* Layout: 一枚のポータル。上で「どこで止まってる？」を選ぶ → 単元マップ → 単元パネル（30秒/じっくり/ドリル/プリント） */
+:root{
+  --paper:#faf9f7; --card:#ffffff; --ink:#1a1f2e; --ink-2:#4a5568; --muted:#8b95a5;
+  --accent:#2c5282; --accent-soft:#ebf4ff; --line:#e2e8f0;
+  --amber:#744210; --amber-soft:#fffbeb; --purple:#553c9a; --purple-soft:#faf5ff;
+  --ok:#2f6f4f; --ok-soft:#e8f5ee; --hero:#1f2a44; --hero-ink:#f3f6fb; --gold:#f6d785;
+  --serif:'Noto Serif JP',serif; --sans:'Noto Sans JP',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#121620; --card:#1a2030; --ink:#e8ecf3; --ink-2:#b4bdcc; --muted:#7e889a;
+  --accent:#8fb6ec; --accent-soft:#1d2a42; --line:#2a3245;
+  --amber:#f0c27a; --amber-soft:#2a2216; --purple:#c3aef0; --purple-soft:#241d36;
+  --ok:#7fd1a4; --ok-soft:#16291f; --hero:#0c1018; --hero-ink:#eef2f8; --gold:#f6d785; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121620; --card:#1a2030; --ink:#e8ecf3; --ink-2:#b4bdcc; --muted:#7e889a;
+  --accent:#8fb6ec; --accent-soft:#1d2a42; --line:#2a3245;
+  --amber:#f0c27a; --amber-soft:#2a2216; --purple:#c3aef0; --purple-soft:#241d36;
+  --ok:#7fd1a4; --ok-soft:#16291f; --hero:#0c1018; --hero-ink:#eef2f8; --gold:#f6d785; color-scheme:dark}
+
+/* ── フィルム調：褶せた写真の色、丸ゴシック、粒状感、フィルムの縁 ── */
+:root[data-look="film"]{
+  --paper:#ece6dc; --card:#f7f3ec; --ink:#1f2b2b; --ink-2:#4f5b59; --muted:#8c918b;
+  --accent:#2b6a70; --accent-soft:#dbe8e7; --line:#d6d2c6;
+  --amber:#94602a; --amber-soft:#f3e6d3; --purple:#a3454f; --purple-soft:#f3e0df;
+  --ok:#66703c; --ok-soft:#e6e8d6; --hero:#1b2829; --hero-ink:#f1e9dc; --gold:#e8a95c;
+  --serif:'Zen Maru Gothic','Noto Sans JP',sans-serif; --mono:'Courier Prime',ui-monospace,monospace; --grain:.09}
+@media (prefers-color-scheme:dark){:root[data-look="film"]:not([data-theme="light"]){
+  --paper:#151d1e; --card:#1d2728; --ink:#ebe4d7; --ink-2:#b5b6ab; --muted:#7f8781;
+  --accent:#7fc0c2; --accent-soft:#1f3334; --line:#2f3a3a;
+  --amber:#e6b57a; --amber-soft:#2d261c; --purple:#e0939a; --purple-soft:#352224;
+  --ok:#bcc58a; --ok-soft:#262a1c; --hero:#0d1415; --hero-ink:#f1e9dc; --gold:#e8a95c; --grain:.12}}
+:root[data-look="film"][data-theme="dark"]{
+  --paper:#151d1e; --card:#1d2728; --ink:#ebe4d7; --ink-2:#b5b6ab; --muted:#7f8781;
+  --accent:#7fc0c2; --accent-soft:#1f3334; --line:#2f3a3a;
+  --amber:#e6b57a; --amber-soft:#2d261c; --purple:#e0939a; --purple-soft:#352224;
+  --ok:#bcc58a; --ok-soft:#262a1c; --hero:#0d1415; --hero-ink:#f1e9dc; --gold:#e8a95c; --grain:.12}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.75}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0;line-height:1.35}
+a{color:var(--accent)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+
+/* header */
+header.top{border-bottom:1px solid var(--line);background:var(--paper)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;flex-wrap:wrap}
+.logo{font-family:var(--serif);font-weight:800;font-size:20px;letter-spacing:.02em;color:var(--ink);text-decoration:none}
+.logo span{color:var(--accent)}
+nav.links{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}
+nav.links a{color:var(--ink-2);text-decoration:none}
+nav.links a:hover{color:var(--accent)}
+
+/* hero */
+.hero{background:var(--hero);color:var(--hero-ink)}
+.hero .wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;padding-block:52px;align-items:center}
+.hero h1{font-size:clamp(26px,4.2vw,40px);font-weight:800}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{color:color-mix(in srgb,var(--hero-ink) 78%,transparent);max-width:34em;margin:16px 0 0}
+.ratio{border:1px solid color-mix(in srgb,var(--hero-ink) 22%,transparent);border-radius:6px;padding:22px 22px 18px;font-family:var(--mono);min-width:0}
+.ratio .q{font-family:var(--sans);font-size:13px;opacity:.8;margin-bottom:12px}
+.ratio .line{font-size:clamp(15px,2.2vw,19px);white-space:nowrap;overflow-x:auto}
+.ratio .line b{color:var(--gold);font-weight:500}
+.ratio .step{display:block;margin-top:8px}
+.ratio .note{font-family:var(--sans);font-size:12px;opacity:.7;margin-top:14px;border-top:1px dashed color-mix(in srgb,var(--hero-ink) 25%,transparent);padding-top:10px}
+
+section{padding-block:44px}
+section + section{border-top:1px solid var(--line)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-size:24px}
+.sec-head p{margin:4px 0 0;color:var(--ink-2);font-size:14px}
+
+/* つまずき診断 */
+.stuck{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stuck button{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;color:var(--ink);display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .15s,transform .15s}
+.stuck button:hover{border-color:var(--accent);transform:translateY(-2px)}
+.stuck .say{font-weight:700;font-size:15px}
+.stuck .go{font-size:12px;color:var(--accent)}
+
+/* 単元マップ */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink-2);border-radius:999px;padding:6px 14px;font-size:13px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--paper);font-weight:700}
+.map{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start}
+.lessons{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:6px;background:var(--card);max-height:520px;overflow-y:auto}
+.lessons li + li{border-top:1px solid var(--line)}
+.lessons button{width:100%;text-align:left;background:none;border:0;padding:11px 14px;color:var(--ink);display:grid;grid-template-columns:2.4em 1fr auto;gap:8px;align-items:center}
+.lessons button:hover{background:var(--accent-soft)}
+.lessons button[aria-current="true"]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.lessons .no{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.lessons .t{font-size:14px;min-width:0}
+.dots{display:flex;gap:3px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+
+.panel{min-width:0}
+.panel h3{font-size:22px;margin-top:4px}
+.panel .sub{color:var(--ink-2);font-size:14px;margin:6px 0 18px}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile .k{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tile .name{font-weight:700}
+.tile .what{font-size:13px;color:var(--ink-2);flex:1}
+.tile a.btn,.tile span.btn{align-self:flex-start;font-size:13px;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:4px;margin-top:4px}
+.tile a.btn{background:var(--accent);color:var(--paper)}
+.tile span.btn{background:var(--line);color:var(--muted)}
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.on{background:var(--ok-soft);color:var(--ok)}
+.pill.off{background:var(--amber-soft);color:var(--amber)}
+.tile.t30{border-top:3px solid var(--gold)}
+.tile.tlong{border-top:3px solid var(--accent)}
+.tile.tdrill{border-top:3px solid var(--purple)}
+.tile.tprint{border-top:3px solid var(--ok)}
+
+/* 今日の1問 */
+.daily{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px;min-width:0}
+.qcard .tag{font-size:12px;color:var(--purple);font-weight:700}
+.qcard p.qq{font-size:17px;margin:10px 0 16px}
+.reveal{background:var(--purple);color:var(--paper);border:0;border-radius:4px;padding:8px 16px;font-weight:700}
+.ans{margin-top:16px;font-family:var(--mono);font-size:15px;background:var(--purple-soft);border-radius:4px;padding:14px;line-height:2}
+.ans small{font-family:var(--sans);display:block;color:var(--ink-2);font-size:13px;line-height:1.6;margin-top:6px}
+.why{font-size:14px;color:var(--ink-2)}
+.why ul{padding-left:1.2em;margin:10px 0 0}
+
+/* 目的別ルート */
+.routes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.route{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.route h3{font-size:18px}
+.route .for{font-size:13px;color:var(--ink-2)}
+.route ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:st}
+.route li{counter-increment:st;display:grid;grid-template-columns:1.8em 1fr;gap:6px;font-size:14px;align-items:start}
+.route li::before{content:counter(st);font-family:var(--mono);font-size:12px;width:1.6em;height:1.6em;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-top:2px}
+.route li button{background:none;border:0;padding:0;color:var(--accent);text-align:left;text-decoration:underline;text-underline-offset:3px}
+.route li .soon{color:var(--muted);font-size:12px;margin-left:4px}
+.route.r1{border-top:3px solid var(--ok)}
+.route.r2{border-top:3px solid var(--purple)}
+.route.r3{border-top:3px solid var(--gold)}
+.parents{margin-top:18px;background:var(--accent-soft);border-radius:6px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:6px 20px;align-items:start}
+.parents h3{font-size:17px;color:var(--accent);grid-column:1/-1}
+.parents p{margin:0;font-size:14px;color:var(--ink-2);grid-column:1/-1;max-width:46em}
+.parents ul{grid-column:1/-1;margin:6px 0 0;padding-left:1.2em;font-size:14px;color:var(--ink-2)}
+
+/* 先生向け */
+.teach{background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);border-radius:6px;padding:22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.teach h3{font-size:19px;color:var(--amber)}
+.teach p{margin:6px 0 0;font-size:14px;color:var(--ink-2)}
+
+footer{border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:24px}
+.sns{display:flex;gap:14px;flex-wrap:wrap}
+.follow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fbtn{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:2px;min-width:0;transition:border-color .15s,transform .15s}
+a.fbtn:hover{border-color:var(--accent);transform:translateY(-2px)}
+.fbtn .n{font-weight:700;font-size:15px}
+.fbtn .d{font-size:12px;color:var(--ink-2)}
+.fbtn .h{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:4px}
+.fbtn.wait{opacity:.6}
+.fbtn.wait .h{color:var(--muted)}
+@media (max-width:760px){.follow{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:400px){.follow{grid-template-columns:1fr}}
+.proto{font-size:12px;color:var(--muted)}
+
+/* フィルム調の形 */
+.edge{display:none}
+[data-look="film"] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:var(--grain);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+[data-look="film"] h1,[data-look="film"] h2,[data-look="film"] h3,[data-look="film"] .logo{font-weight:900;letter-spacing:.01em}
+[data-look="film"] .hero{position:relative;overflow:hidden;
+  background:radial-gradient(60% 80% at 100% 0%,color-mix(in srgb,var(--gold) 38%,transparent),transparent 70%),
+             radial-gradient(40% 60% at 0% 100%,color-mix(in srgb,var(--purple) 30%,transparent),transparent 70%),
+             linear-gradient(180deg,color-mix(in srgb,var(--accent) 18%,transparent),transparent 60%),var(--hero)}
+[data-look="film"] .hero::before,[data-look="film"] .hero::after{content:"";position:absolute;left:0;right:0;height:14px;
+  background:repeating-linear-gradient(90deg,transparent 0 10px,color-mix(in srgb,var(--hero-ink) 70%,transparent) 10px 22px,transparent 22px 34px);
+  background-size:34px 8px;background-repeat:repeat-x;background-position:0 50%;opacity:.35}
+[data-look="film"] .hero::before{top:6px}
+[data-look="film"] .hero::after{bottom:6px}
+[data-look="film"] .edge{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--gold);opacity:.85;grid-column:1/-1;margin-bottom:-18px}
+[data-look="film"] .ratio{border-radius:14px;background:color-mix(in srgb,var(--hero-ink) 6%,transparent);transform:rotate(-1.2deg)}
+[data-look="film"] .stuck button,[data-look="film"] .tile,[data-look="film"] .route,[data-look="film"] .qcard,[data-look="film"] .fbtn,[data-look="film"] .lessons,[data-look="film"] .teach,[data-look="film"] .parents{border-radius:14px}
+[data-look="film"] .tile,[data-look="film"] .route,[data-look="film"] .qcard{box-shadow:0 1px 0 var(--line),0 8px 20px -14px color-mix(in srgb,var(--ink) 40%,transparent)}
+[data-look="film"] .eyebrow{font-family:var(--mono);letter-spacing:.16em}
+
+@media (max-width:760px){
+  .hero .wrap{grid-template-columns:1fr;gap:24px;padding-block:36px}
+  .stuck{grid-template-columns:1fr}
+  .routes{grid-template-columns:1fr}
+  .map{grid-template-columns:1fr}
+  .lessons{max-height:300px}
+  .daily{grid-template-columns:1fr}
+  .teach{grid-template-columns:1fr}
+}
+@media (max-width:440px){.tiles{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<script>document.documentElement.dataset.look="film";</script>
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top">Kimi <span>to</span> Lab</a>
+  <nav class="links">
+    <a href="#stuck">つまずき診断</a><a href="#map">単元マップ</a><a href="#routes">目的別ルート</a><a href="#daily">今日の1問</a><a href="#teachers">先生の方へ</a>
+  </nav>
+</div></header>
+
+<div class="hero" id="top"><div class="wrap">
+  <div class="edge" aria-hidden="true"><span>KIMI TO LAB 400</span><span>▸ 01A</span></div>
+  <div>
+    <div class="eyebrow" style="color:var(--gold)">理科が苦手なキミのための実験室</div>
+    <h1 style="margin-top:10px">「わからない」が<em>どこで止まってるか</em>、<br>いっしょに見つけよう。</h1>
+    <p>公式を丸暗記しなくて大丈夫。Kimi to Lab では、つまずいたところからじっくりゆっくり解いていきます。30秒の動画で見て、ドリルで試して、プリントで仕上げる。</p>
+  </div>
+  <div class="ratio" aria-label="比で解く例">
+    <div class="q">150 [m] を 30.0 [s] で走った。速さは？</div>
+    <div class="line">30.0 [s] : 150 [m] = <b>1 [s]</b> : <b>x [m]</b></div>
+    <div class="line step">30.0 × x = 150 × 1</div>
+    <div class="line step">x = <b>5.00</b> → 5.00 [m/s]</div>
+    <div class="note">割り算？掛け算？で迷ったら、まず比の式を書く。</div>
+  </div>
+</div></div>
+
+<main>
+<section id="stuck"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">STEP 1</div>
+    <h2>どこでつまずいてる？</h2>
+    <p>近いものを選ぶと、ぴったりの単元に飛びます。</p>
+  </div></div>
+  <div class="stuck" id="stuckList"></div>
+</div></section>
+
+<section id="map"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">STEP 2</div>
+    <h2>単元マップ</h2>
+    <p>●の数は「30秒動画・じっくり動画・ドリル・プリント」のそろい具合です。</p>
+  </div></div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="map">
+    <ul class="lessons" id="lessons"></ul>
+    <div class="panel" id="panel" aria-live="polite"></div>
+  </div>
+</div></section>
+
+<section id="routes"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">STEP 3</div>
+    <h2>どこをめざす？目的別ルート</h2>
+    <p>今いる場所から、行きたい場所まで。単元名を押すとその単元を開きます。</p>
+  </div></div>
+  <div class="routes" id="routeList"></div>
+  <div class="parents" id="parents">
+    <h3>おうちで学ぶ方、保護者の方へ</h3>
+    <p>Kimi to Lab は、現役の高校理科教員が作っています。学校の授業と同じ内容を、おうちで自分のペースで進められるようにしています。</p>
+    <ul>
+      <li>登録なし・無料で、動画・ドリル・プリントを使えます</li>
+      <li>1単元は30分ほど。今日は動画だけ、でも大丈夫です</li>
+      <li>高卒認定試験（高認）の理科にも対応したルートがあります</li>
+    </ul>
+  </div>
+</div></section>
+
+<section id="daily"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">TODAY</div>
+    <h2>今日の1問</h2>
+    <p>Shorts と同じ問題。まず自分で比の式を書いてから答えを見てね。</p>
+  </div></div>
+  <div class="daily">
+    <div class="qcard">
+      <div class="tag">化学基礎　物質量（mol）</div>
+      <p class="qq">水 H<sub>2</sub>O が 90 [g] ある。これは何 [mol]？<br><span style="font-size:13px;color:var(--ink-2)">（H<sub>2</sub>O のモル質量 18 [g/mol]）</span></p>
+      <button class="reveal" id="revealBtn" aria-expanded="false" aria-controls="ans">答えを見る</button>
+      <div class="ans" id="ans" hidden>
+        1 [mol] : 18 [g] = x [mol] : 90 [g]<br>18 × x = 90 × 1<br>x = 5.0 → <b>5.0 [mol]</b>
+        <small>「1 [mol] あたり 18 [g]」を比の左側に置くのがコツ。</small>
+      </div>
+    </div>
+    <div class="why">
+      <h3 style="font-size:17px">なんで「比」なの？</h3>
+      <ul>
+        <li>速さ・mol・密度・電力……どれも同じ形の式で解ける</li>
+        <li>割り算か掛け算かを迷わなくていい</li>
+        <li>単位をそのまま書くから、答えの単位も自然に出てくる</li>
+      </ul>
+      <p style="margin-top:14px">時短ワザは、比で解けるようになってから。</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="teachers"><div class="wrap">
+  <div class="teach">
+    <div>
+      <div class="eyebrow" style="color:var(--amber)">FOR TEACHERS</div>
+      <h3 style="margin-top:6px">授業でそのまま使える教材パック</h3>
+      <p>穴埋めプリント・スライド・ドリルURLを単元ごとにセットに。物理基礎 力学16回分から順次公開予定です。</p>
+    </div>
+    <span class="pill off" style="font-size:13px;padding:6px 14px">準備中</span>
+  </div>
+</div></section>
+<section id="follow"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">FOLLOW</div>
+    <h2>新しい動画や教材のお知らせ</h2>
+    <p>使っているSNSでフォローしておくと、更新を見逃しません。</p>
+  </div></div>
+  <div class="follow">
+    <a class="fbtn" href="https://www.youtube.com/@Kimi_to_lab?sub_confirmation=1" target="_blank" rel="noopener"><span class="n">YouTube</span><span class="d">動画が出たら通知が届く</span><span class="h">チャンネル登録する</span></a>
+    <a class="fbtn" href="https://www.instagram.com/kimi_to_lab/" target="_blank" rel="noopener"><span class="n">Instagram</span><span class="d">図解でサクッと復習</span><span class="h">@kimi_to_lab をフォロー</span></a>
+    <a class="fbtn" href="https://www.threads.com/@kimi_to_lab" target="_blank" rel="noopener"><span class="n">Threads</span><span class="d">先生のつぶやき・保護者の方にも</span><span class="h">@kimi_to_lab をフォロー</span></a>
+    <a class="fbtn" href="https://note.com/kimitolab" target="_blank" rel="noopener"><span class="n">note</span><span class="d">じっくり読める解説記事</span><span class="h">記事を読む</span></a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="sns">
+    <a href="https://www.youtube.com/@Kimi_to_lab" target="_blank" rel="noopener">YouTube @Kimi_to_lab</a>
+    <a href="https://www.instagram.com/kimi_to_lab/" target="_blank" rel="noopener">Instagram @kimi_to_lab</a>
+    <a href="https://www.threads.com/@kimi_to_lab" target="_blank" rel="noopener">Threads</a>
+    <a href="https://note.com/kimitolab" target="_blank" rel="noopener">note</a>
+  </div>
+  <div class="proto">© Kimi to Lab</div>
+</div></footer>
+
+<script>
+const YT="https://www.youtube.com/@Kimi_to_lab";
+// s=30秒Shorts, v=じっくり動画, d=ドリル, p=プリント（URLがあるものだけ「公開中」）
+const PR="https://sak19lab.github.io/physics/", DR=PR+"drill/", KD=PR+"kajin-drill/", SH="https://www.youtube.com/@Kimi_to_lab/shorts";
+const P=s=>PR+s+"-fill.html";
+const SUBJECTS=[
+ {id:"math",name:"物理の数学",lessons:[
+  ["単位のルール",{v:"https://youtu.be/Cr1aV1H3dP0",p:P("01-units")}],["指数の扱い方",{v:"https://youtu.be/wHe6-xfdyu0",p:P("02-exponents")}],["有効数字",{v:"https://youtu.be/vzAcQJ8Xq68",p:P("03-significant-figures")}],["ベクトルとスカラー",{p:P("04-vectors-scalars")}],["三角関数（sin, cos, tan）",{d:DR,p:P("05-trigonometry")}],["グラフの読み取り",{p:P("06-graphs")}]]},
+ {id:"mech",name:"力学",lessons:[
+  ["慣性の法則",{p:P("01-inertia-law")}],["力と加速度の法則",{p:P("02-force-and-acceleration")}],["運動の表し方（速さ）",{s:SH,d:DR,p:P("03-motion-description")}],["作用・反作用の法則",{p:P("04-action-reaction")}],["重力と「重さ」のちがい",{p:P("05-gravity-and-weight")}],["摩擦力",{d:DR,p:P("06-friction")}],["弾性力（ばねの法則）",{p:P("07-elastic-force")}],["力の合成・分解",{d:DR,p:P("08-force-composition")}],["運動方程式① 水平方向",{d:DR,p:P("09-equation-of-motion-horizontal")}],["運動方程式② 斜面",{d:DR,p:P("10-equation-of-motion-incline")}],["仕事と仕事率",{p:P("11-work-and-power")}],["力学的エネルギー保存則",{p:P("12-energy-conservation")}],["運動量と力積",{p:P("13-momentum-and-impulse")}],["衝突（反発・非弾性）",{p:P("14-collisions")}],["等速円運動",{p:P("15-uniform-circular-motion")}],["力学総まとめ",{p:P("16-review")}]]},
+ {id:"heat",name:"熱",lessons:[
+  ["温度と熱",{p:P("01-temperature-and-heat")}],["比熱",{p:P("02-specific-heat")}],["あたたかさは逃げない（熱量保存則）",{p:P("03-heat-conservation")}],["熱と仕事",{p:P("04-heat-and-work")}],["ボイル・シャルルの法則",{p:P("05-boyle-charles")}],["熱力学第一法則",{p:P("06-first-law")}]]},
+ {id:"wave",name:"波",lessons:[
+  ["波の正体と基本式",{}],["2つのグラフの罠",{}],["波同士の出会い",{}],["壁にぶつかった波",{}],["音の正体とうなり",{}],["楽器の物理（弦と気柱）",{}],["気柱共鳴を深める",{}]]},
+ {id:"elec",name:"電磁気",lessons:[
+  ["静電気と電子のドラマ",{}],["電流の正体とオームの法則",{}],["直列・並列回路と合成抵抗",{}],["ジュールの法則と電気代",{}],["電流が作る磁場",{}],["モーターの仕組み",{}],["電磁誘導",{}],["交流の正体と実効値",{}],["変圧器・送電・整流・電磁波",{}]]},
+ {id:"kajin",name:"科学と人間生活",lessons:[
+  ["生物の多様性と共通性",{d:KD}],["細胞のつくり",{d:KD}],["真核細胞と原核細胞",{d:KD}],["代謝",{d:KD}]]},
+ {id:"chem",name:"化学基礎",lessons:[
+  ["原子・周期表・化学結合",{}],["物質量（mol）とモル質量",{}],["化学反応式とmol",{}],["熱化学方程式",{}]]}
+];
+const STUCK=[
+ {say:"単位がごちゃごちゃで、わからない",go:"物理の数学 › 単位のルール",to:["math",0]},
+ {say:"有効数字って何桁にすればいいの？",go:"物理の数学 › 有効数字",to:["math",2]},
+ {say:"速さの問題でいつも止まる",go:"力学 › 運動の表し方（速さ）",to:["mech",2]},
+ {say:"力の矢印がうまく描けない",go:"力学 › 力の合成・分解",to:["mech",7]},
+ {say:"mol がそもそも何かわからない",go:"化学基礎 › 物質量（mol）",to:["chem",1]},
+ {say:"回路図を見ると固まる",go:"電磁気 › 直列・並列回路",to:["elec",2]}
+];
+// 目的別ルート：to=[科目id,単元番号] があれば単元マップへ、soon=準備中
+const ROUTES=[
+ {c:"r1",title:"苦手をなくしたい",for:"授業についていけない、どこから戻ればいいかわからない人へ",steps:[
+  {t:"単位のルール",to:["math",0]},{t:"有効数字",to:["math",2]},{t:"運動の表し方（速さ）",to:["mech",2]},{t:"ドリルで定着チェック"}]},
+ {c:"r2",title:"高認をめざす",for:"高卒認定試験の理科を、自分のペースで準備したい人へ",steps:[
+  {t:"科学と人間生活（生物の分野）",to:["kajin",0]},{t:"物理基礎なら：力学の基本",to:["mech",0]},{t:"化学基礎なら：物質量（mol）",to:["chem",1]},{t:"高認の過去問で腕だめし",soon:1}]},
+ {c:"r3",title:"受験・進学をめざす",for:"定期テストから入試まで、一歩ずつ上をめざしたい人へ",steps:[
+  {t:"力学総まとめ",to:["mech",15]},{t:"テスト対策特訓（文章題）",soon:1},{t:"共通テストの基礎問題",soon:1},{t:"入試問題解説（サブチャンネル）",soon:1}]}
+];
+const TILES=[
+ ["s","t30","30秒で見る","Shorts で要点だけ。通学中にサクッと。","YouTube Shorts へ"],
+ ["v","tlong","じっくり見る","講義動画でじっくり解説。止めながら見てOK。","解説動画へ"],
+ ["d","tdrill","やってみる","サクサク解ける4択ドリル。20問で腕だめし。","ドリルを始める"],
+ ["p","tprint","印刷する","授業と同じ穴埋めプリント（PDF）。","プリントを開く"]
+];
+const $=s=>document.querySelector(s);
+let cur={sub:"mech",i:2};
+try{const saved=JSON.parse(localStorage.getItem("ktl-cur")||"null");if(saved&&saved.sub)cur=saved}catch(e){}
+
+function renderTabs(){
+  $("#tabs").innerHTML=SUBJECTS.map(s=>`<button class="tab" role="tab" id="tab-${s.id}" aria-selected="${s.id===cur.sub}" data-s="${s.id}">${s.name}</button>`).join("");
+}
+function renderLessons(){
+  const sub=SUBJECTS.find(s=>s.id===cur.sub);
+  $("#lessons").innerHTML=sub.lessons.map(([t,st],i)=>`<li><button data-i="${i}" aria-current="${i===cur.i}"><span class="no">${String(i+1).padStart(2,"0")}</span><span class="t">${t}</span><span class="dots" aria-label="そろい具合">${["s","v","d","p"].map(k=>`<i class="${st[k]?"on":""}"></i>`).join("")}</span></button></li>`).join("");
+}
+function renderPanel(){
+  const sub=SUBJECTS.find(s=>s.id===cur.sub);const [t,st]=sub.lessons[cur.i];
+  const n=["s","v","d","p"].filter(k=>st[k]).length;
+  $("#panel").innerHTML=`<div class="eyebrow">${sub.name}　第${cur.i+1}回</div><h3>${t}</h3><p class="sub">4つのうち ${n} つ公開中。上から順にやると、だいたい30分で1単元。</p>
+  <div class="tiles">${TILES.map(([k,c,name,what,cta])=>`<div class="tile ${c}"><div class="k"><span class="name">${name}</span><span class="pill ${st[k]?"on":"off"}">${st[k]?"公開中":"準備中"}</span></div><div class="what">${what}</div>${st[k]?`<a class="btn" href="${typeof st[k]==="string"?st[k]:YT}" target="_blank" rel="noopener">${cta}</a>`:`<span class="btn">もうすぐ</span>`}</div>`).join("")}</div>`;
+}
+function renderAll(){renderTabs();renderLessons();renderPanel();try{localStorage.setItem("ktl-cur",JSON.stringify(cur))}catch(e){}}
+$("#stuckList").innerHTML=STUCK.map((s,i)=>`<button data-k="${i}"><span class="say">「${s.say}」</span><span class="go">→ ${s.go}</span></button>`).join("");
+$("#stuckList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const [sub,i]=STUCK[b.dataset.k].to;cur={sub,i};renderAll();$("#map").scrollIntoView({behavior:"smooth"})});
+$("#routeList").innerHTML=ROUTES.map((r,ri)=>`<div class="route ${r.c}"><h3>${r.title}</h3><div class="for">${r.for}</div><ol>${r.steps.map((s,si)=>`<li><span>${s.to?`<button data-r="${ri}" data-s="${si}">${s.t}</button>`:s.t}${s.soon?`<span class="soon">準備中</span>`:""}</span></li>`).join("")}</ol></div>`).join("");
+$("#routeList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const [sub,i]=ROUTES[b.dataset.r].steps[b.dataset.s].to;cur={sub,i};renderAll();$("#map").scrollIntoView({behavior:"smooth"})});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;cur={sub:b.dataset.s,i:0};renderAll()});
+$("#lessons").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cur.i=+b.dataset.i;renderAll()});
+$("#revealBtn").addEventListener("click",e=>{const a=$("#ans");a.hidden=!a.hidden;e.currentTarget.setAttribute("aria-expanded",String(!a.hidden));e.currentTarget.textContent=a.hidden?"答えを見る":"答えを隠す"});
+renderAll();
+
+</script>
+
+</body>
+</html>
