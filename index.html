@@ -142,7 +142,7 @@ section + section{border-top:1px solid var(--line)}
 .why ul{padding-left:1.2em;margin:10px 0 0}
 
 /* 目的別ルート */
-.routes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .route{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .route h3{font-size:18px}
 .route .for{font-size:13px;color:var(--ink-2)}
@@ -154,6 +154,18 @@ section + section{border-top:1px solid var(--line)}
 .route.r1{border-top:3px solid var(--ok)}
 .route.r2{border-top:3px solid var(--purple)}
 .route.r3{border-top:3px solid var(--gold)}
+.route.r4{border-top:3px solid var(--accent)}
+.route li a{color:var(--accent);text-underline-offset:3px;font-weight:700}
+/* 資格にチャレンジ */
+.quals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px}
+.qual{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0;border-top:3px solid var(--accent)}
+.qual .lv{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--accent)}
+.qual h3{font-size:20px}
+.qual p{margin:0;font-size:14px;color:var(--ink-2)}
+.qual .chips{display:flex;flex-wrap:wrap;gap:6px}
+.qual .chips span{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.qual .link{font-size:13px;color:var(--ink-2)}
+.qual a.go{align-self:flex-start;background:var(--accent);color:var(--paper);text-decoration:none;font-weight:700;font-size:14px;padding:8px 16px;border-radius:6px;margin-top:4px}
 .parents{margin-top:18px;background:var(--accent-soft);border-radius:6px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:6px 20px;align-items:start}
 .parents h3{font-size:17px;color:var(--accent);grid-column:1/-1}
 .parents p{margin:0;font-size:14px;color:var(--ink-2);grid-column:1/-1;max-width:46em}
@@ -219,7 +231,7 @@ a.fbtn:hover{border-color:var(--accent);transform:translateY(-2px)}
 <header class="top"><div class="wrap">
   <a class="logo" href="#top">Kimi <span>to</span> Lab</a>
   <nav class="links">
-    <a href="#stuck">つまずき診断</a><a href="#map">単元マップ</a><a href="#routes">目的別ルート</a><a href="#daily">今日の1問</a><a href="#teachers">先生方へ</a>
+    <a href="#stuck">つまずき診断</a><a href="#map">単元マップ</a><a href="#routes">目的別ルート</a><a href="#quals">資格</a><a href="#daily">今日の1問</a><a href="#teachers">先生方へ</a>
   </nav>
 </div></header>
 
@@ -278,6 +290,15 @@ a.fbtn:hover{border-color:var(--accent);transform:translateY(-2px)}
       <li>高卒認定試験（高認）の理科にも対応したルートがあります</li>
     </ul>
   </div>
+</div></section>
+
+<section id="quals"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">CHALLENGE</div>
+    <h2>資格にチャレンジ</h2>
+    <p>授業で習った理科が、そのまま資格試験で使えます。ドリルで本番の形に慣れておこう。</p>
+  </div></div>
+  <div class="quals" id="qualList"></div>
 </div></section>
 
 <section id="daily"><div class="wrap">
@@ -379,7 +400,15 @@ const ROUTES=[
  {c:"r2",title:"高認をめざす",for:"高卒認定試験の理科を、自分のペースで準備したい人へ",steps:[
   {t:"科学と人間生活（生物の分野）",to:["kajin",0]},{t:"物理基礎なら：力学の基本",to:["mech",0]},{t:"化学基礎なら：物質量（mol）",to:["chem",1]},{t:"高認の過去問で腕だめし",soon:1}]},
  {c:"r3",title:"受験・進学をめざす",for:"定期テストから入試まで、一歩ずつ上をめざしたい人へ",steps:[
-  {t:"力学総まとめ",to:["mech",15]},{t:"テスト対策特訓（文章題）",soon:1},{t:"共通テストの基礎問題",soon:1},{t:"入試問題解説（サブチャンネル）",soon:1}]}
+  {t:"力学総まとめ",to:["mech",15]},{t:"テスト対策特訓（文章題）",soon:1},{t:"共通テストの基礎問題",soon:1},{t:"入試問題解説（サブチャンネル）",soon:1}]},
+ {c:"r4",title:"資格をとる",for:"危険物取扱者などの資格に、理科の基礎から挑戦したい人へ",steps:[
+  {t:"物質量（mol）とモル質量",to:["chem",1]},{t:"比熱",to:["heat",1]},{t:"静電気と電子のドラマ",to:["elec",0]},{t:"乙4ドリル（物理・化学）",href:"https://sak19lab.github.io/physics/otsu4-drill/"}]}
+];
+// 資格カード：増やすときはここに1つ足すだけ
+const QUALS=[
+ {lv:"HAZMAT · CLASS 4",title:"危険物取扱者 乙種第4類",desc:"「物理・化学」の分野を、4択と○×で練習できます。最後は本番形式の模試10問で腕だめし。",
+  chips:["燃焼のしくみ","消火の理論","引火点・発火点","比重と蒸気比重","比熱・熱膨張","静電気","mol・反応熱","有機化合物"],
+  rel:"関連する単元：化学基礎・熱・電磁気",url:"https://sak19lab.github.io/physics/otsu4-drill/"}
 ];
 const TILES=[
  ["s","t30","30秒で見る","Shorts で要点だけ。通学中にサクッと。","YouTube Shorts へ"],
@@ -407,7 +436,8 @@ function renderPanel(){
 function renderAll(){renderTabs();renderLessons();renderPanel();try{localStorage.setItem("ktl-cur",JSON.stringify(cur))}catch(e){}}
 $("#stuckList").innerHTML=STUCK.map((s,i)=>`<button data-k="${i}"><span class="say">「${s.say}」</span><span class="go">→ ${s.go}</span></button>`).join("");
 $("#stuckList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const [sub,i]=STUCK[b.dataset.k].to;cur={sub,i};renderAll();$("#map").scrollIntoView({behavior:"smooth"})});
-$("#routeList").innerHTML=ROUTES.map((r,ri)=>`<div class="route ${r.c}"><h3>${r.title}</h3><div class="for">${r.for}</div><ol>${r.steps.map((s,si)=>`<li><span>${s.to?`<button data-r="${ri}" data-s="${si}">${s.t}</button>`:s.t}${s.soon?`<span class="soon">準備中</span>`:""}</span></li>`).join("")}</ol></div>`).join("");
+$("#qualList").innerHTML=QUALS.map(q=>`<div class="qual"><div class="lv">${q.lv}</div><h3>${q.title}</h3><p>${q.desc}</p><div class="chips">${q.chips.map(c=>`<span>${c}</span>`).join("")}</div><div class="link">${q.rel}</div><a class="go" href="${q.url}" target="_blank" rel="noopener">ドリルを始める</a></div>`).join("");
+$("#routeList").innerHTML=ROUTES.map((r,ri)=>`<div class="route ${r.c}"><h3>${r.title}</h3><div class="for">${r.for}</div><ol>${r.steps.map((s,si)=>`<li><span>${s.to?`<button data-r="${ri}" data-s="${si}">${s.t}</button>`:s.href?`<a href="${s.href}" target="_blank" rel="noopener">${s.t}</a>`:s.t}${s.soon?`<span class="soon">準備中</span>`:""}</span></li>`).join("")}</ol></div>`).join("");
 $("#routeList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const [sub,i]=ROUTES[b.dataset.r].steps[b.dataset.s].to;cur={sub,i};renderAll();$("#map").scrollIntoView({behavior:"smooth"})});
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;cur={sub:b.dataset.s,i:0};renderAll()});
 $("#lessons").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cur.i=+b.dataset.i;renderAll()});
