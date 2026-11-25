@@ -125,6 +125,9 @@ section + section{border-top:1px solid var(--line)}
 .pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
 .pill.on{background:var(--ok-soft);color:var(--ok)}
 .pill.off{background:var(--amber-soft);color:var(--amber)}
+.vlist{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.vlist a{display:block;font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;padding:6px 10px;border-radius:6px;background:var(--accent-soft)}
+.vlist a:hover{text-decoration:underline}
 .tile.t30{border-top:3px solid var(--gold)}
 .tile.tlong{border-top:3px solid var(--accent)}
 .tile.tdrill{border-top:3px solid var(--purple)}
@@ -382,7 +385,7 @@ const SUBJECTS=[
  {id:"math",name:"物理の数学",lessons:[
   ["単位のルール",{v:"https://youtu.be/Cr1aV1H3dP0",p:P("01-units")}],["指数の扱い方",{v:"https://youtu.be/wHe6-xfdyu0",p:P("02-exponents")}],["有効数字",{v:"https://youtu.be/vzAcQJ8Xq68",p:P("03-significant-figures")}],["ベクトルとスカラー",{p:P("04-vectors-scalars")}],["三角関数（sin, cos, tan）",{d:DR,p:P("05-trigonometry")}],["グラフの読み取り",{p:P("06-graphs")}]]},
  {id:"mech",name:"力学",lessons:[
-  ["慣性の法則",{p:P("01-inertia-law")}],["力と加速度の法則",{p:P("02-force-and-acceleration")}],["運動の表し方（速さ）",{s:SH,d:DR,p:P("03-motion-description")}],["作用・反作用の法則",{p:P("04-action-reaction")}],["重力と「重さ」のちがい",{p:P("05-gravity-and-weight")}],["摩擦力",{d:DR,p:P("06-friction")}],["弾性力（ばねの法則）",{p:P("07-elastic-force")}],["力の合成・分解",{d:DR,p:P("08-force-composition")}],["運動方程式① 水平方向",{d:DR,p:P("09-equation-of-motion-horizontal")}],["運動方程式② 斜面",{d:DR,p:P("10-equation-of-motion-incline")}],["仕事と仕事率",{p:P("11-work-and-power")}],["力学的エネルギー保存則",{p:P("12-energy-conservation")}],["運動量と力積",{p:P("13-momentum-and-impulse")}],["衝突（反発・非弾性）",{p:P("14-collisions")}],["等速円運動",{p:P("15-uniform-circular-motion")}],["力学総まとめ",{p:P("16-review")}]]},
+  ["慣性の法則",{p:P("01-inertia-law")}],["力と加速度の法則",{p:P("02-force-and-acceleration")}],["運動の表し方（速さ）",{s:[{t:"加速度の計算",u:"https://www.youtube.com/shorts/C8RJ9q-UHDY"}],d:DR,p:P("03-motion-description")}],["等加速度直線運動（3つの公式）",{s:[{t:"3つの公式【導入編】その1",u:"https://www.youtube.com/shorts/98nc4h89XYA"},{t:"3つの公式【導入編】その2",u:"https://www.youtube.com/shorts/Ar0l2M-CpSA"},{t:"3つの公式【導入編】その3",u:"https://www.youtube.com/shorts/SAKgqGi9h08"},{t:"今日の1問 第1問",u:"https://www.youtube.com/shorts/jhPKtod2lTE"},{t:"今日の1問 第2問",u:"https://www.youtube.com/shorts/HcEdtZIBXPs"},{t:"今日の1問 第3問",u:"https://www.youtube.com/shorts/Zg08JKtMl9Y"},{t:"自由落下の公式、実は暗記しなくていい！？",u:"https://www.youtube.com/shorts/KEW9AJ678xg"}],d:DR,p:PR+"equal-acceleration/worksheet.html"}],["作用・反作用の法則",{p:P("04-action-reaction")}],["重力と「重さ」のちがい",{p:P("05-gravity-and-weight")}],["摩擦力",{d:DR,p:P("06-friction")}],["弾性力（ばねの法則）",{p:P("07-elastic-force")}],["圧力・水圧・浮力",{s:[{t:"圧力の計算",u:"https://www.youtube.com/shorts/R1uOv_Xd20s"},{t:"浮力の計算",u:"https://www.youtube.com/shorts/pcHGaP01pZI"}],p:PR+"pressure-fluids/"}],["力の合成・分解",{d:DR,p:P("08-force-composition")}],["運動方程式① 水平方向",{d:DR,p:P("09-equation-of-motion-horizontal")}],["運動方程式② 斜面",{d:DR,p:P("10-equation-of-motion-incline")}],["仕事と仕事率",{p:P("11-work-and-power")}],["力学的エネルギー保存則",{s:[{t:"運動エネルギーの計算",u:"https://www.youtube.com/shorts/lO7R_8oRcN0"}],p:P("12-energy-conservation")}],["運動量と力積",{p:P("13-momentum-and-impulse")}],["衝突（反発・非弾性）",{p:P("14-collisions")}],["等速円運動",{p:P("15-uniform-circular-motion")}],["力学総まとめ",{p:P("16-review")}]]},
  {id:"heat",name:"熱",lessons:[
   ["温度と熱",{p:P("01-temperature-and-heat")}],["比熱",{p:P("02-specific-heat")}],["あたたかさは逃げない（熱量保存則）",{p:P("03-heat-conservation")}],["熱と仕事",{p:P("04-heat-and-work")}],["ボイル・シャルルの法則",{p:P("05-boyle-charles")}],["熱力学第一法則",{p:P("06-first-law")}]]},
  {id:"wave",name:"波",lessons:[
@@ -392,13 +395,13 @@ const SUBJECTS=[
  {id:"kajin",name:"科学と人間生活",lessons:[
   ["生物の多様性と共通性",{d:KD}],["細胞のつくり",{d:KD}],["真核細胞と原核細胞",{d:KD}],["代謝",{d:KD}],["光合成・呼吸・発酵",{d:KD}],["微生物の種類",{d:KD}],["生態系と微生物",{d:KD}]]},
  {id:"chem",name:"化学基礎",lessons:[
-  ["原子・周期表・化学結合",{}],["物質量（mol）とモル質量",{}],["化学反応式とmol",{}],["熱化学方程式",{}]]}
+  ["原子・周期表・化学結合",{}],["物質量（mol）とモル質量",{s:[{t:"乙4対策 molの正体",u:"https://www.youtube.com/shorts/JEWUJ9HqOso"}]}],["化学反応式とmol",{}],["熱化学方程式",{}]]}
 ];
 const STUCK=[
  {say:"単位がごちゃごちゃで、わからない",go:"物理の数学 › 単位のルール",to:["math",0]},
  {say:"有効数字って何桁にすればいいの？",go:"物理の数学 › 有効数字",to:["math",2]},
  {say:"速さの問題でいつも止まる",go:"力学 › 運動の表し方（速さ）",to:["mech",2]},
- {say:"力の矢印がうまく描けない",go:"力学 › 力の合成・分解",to:["mech",7]},
+ {say:"力の矢印がうまく描けない",go:"力学 › 力の合成・分解",to:["mech",9]},
  {say:"mol がそもそも何かわからない",go:"化学基礎 › 物質量（mol）",to:["chem",1]},
  {say:"回路図を見ると固まる",go:"電磁気 › 直列・並列回路",to:["elec",2]}
 ];
@@ -409,7 +412,7 @@ const ROUTES=[
  {c:"r2",title:"高認をめざす",for:"高卒認定試験の理科を、自分のペースで準備したい人へ",steps:[
   {t:"科学と人間生活（生物の分野）",to:["kajin",0]},{t:"物理基礎なら：力学の基本",to:["mech",0]},{t:"化学基礎なら：物質量（mol）",to:["chem",1]},{t:"高認の過去問で腕だめし",soon:1}]},
  {c:"r3",title:"受験・進学をめざす",for:"定期テストから入試まで、一歩ずつ上をめざしたい人へ",steps:[
-  {t:"力学総まとめ",to:["mech",15]},{t:"テスト対策特訓（文章題）",soon:1},{t:"共通テストの基礎問題",soon:1},{t:"入試問題解説（サブチャンネル）",soon:1}]},
+  {t:"力学総まとめ",to:["mech",17]},{t:"テスト対策特訓（文章題）",soon:1},{t:"共通テストの基礎問題",soon:1},{t:"入試問題解説（サブチャンネル）",soon:1}]},
  {c:"r4",title:"資格をとる",for:"危険物取扱者などの資格に、理科の基礎から挑戦したい人へ",steps:[
   {t:"物質量（mol）とモル質量",to:["chem",1]},{t:"比熱",to:["heat",1]},{t:"静電気と電子のドラマ",to:["elec",0]},{t:"乙4ドリル（物理・化学）",href:"https://sak19lab.github.io/physics/otsu4-drill/"}]}
 ];
@@ -448,8 +451,8 @@ function renderLessons(){
 function renderPanel(){
   const sub=SUBJECTS.find(s=>s.id===cur.sub);const [t,st]=sub.lessons[cur.i];
   const n=["s","v","d","p"].filter(k=>st[k]).length;
-  $("#panel").innerHTML=`<div class="eyebrow">${sub.name}　第${cur.i+1}回</div><h3>${t}</h3><p class="sub">4つのうち ${n} つ公開中。上から順にやると、だいたい30分で1単元。</p>
-  <div class="tiles">${TILES.map(([k,c,name,what,cta])=>`<div class="tile ${c}"><div class="k"><span class="name">${name}</span><span class="pill ${st[k]?"on":"off"}">${st[k]?"公開中":"準備中"}</span></div><div class="what">${what}</div>${st[k]?`<a class="btn" href="${typeof st[k]==="string"?st[k]:YT}" target="_blank" rel="noopener">${cta}</a>`:`<span class="btn">もうすぐ</span>`}</div>`).join("")}</div>`;
+  $("#panel").innerHTML=`<div class="eyebrow">${sub.name}</div><h3>${t}</h3><p class="sub">4つのうち ${n} つ公開中。上から順にやると、だいたい30分で1単元。</p>
+  <div class="tiles">${TILES.map(([k,c,name,what,cta])=>`<div class="tile ${c}"><div class="k"><span class="name">${name}</span><span class="pill ${st[k]?"on":"off"}">${st[k]?"公開中":"準備中"}</span></div><div class="what">${what}</div>${Array.isArray(st[k])?`<ul class="vlist">${st[k].map(v=>`<li><a href="${v.u}" target="_blank" rel="noopener">${v.t}</a></li>`).join("")}</ul>`:st[k]?`<a class="btn" href="${typeof st[k]==="string"?st[k]:YT}" target="_blank" rel="noopener">${cta}</a>`:`<span class="btn">もうすぐ</span>`}</div>`).join("")}</div>`;
 }
 function renderAll(){renderTabs();renderLessons();renderPanel();try{localStorage.setItem("ktl-cur",JSON.stringify(cur))}catch(e){}}
 $("#stuckList").innerHTML=STUCK.map((s,i)=>`<button data-k="${i}"><span class="say">「${s.say}」</span><span class="go">→ ${s.go}</span></button>`).join("");
