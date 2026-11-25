@@ -157,7 +157,7 @@ section + section{border-top:1px solid var(--line)}
 .route.r4{border-top:3px solid var(--accent)}
 .route li a{color:var(--accent);text-underline-offset:3px;font-weight:700}
 /* 資格にチャレンジ */
-.quals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px}
+.quals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
 .qual{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0;border-top:3px solid var(--accent)}
 .qual .lv{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--accent)}
 .qual h3{font-size:20px}
@@ -231,7 +231,7 @@ a.fbtn:hover{border-color:var(--accent);transform:translateY(-2px)}
 <header class="top"><div class="wrap">
   <a class="logo" href="#top">Kimi <span>to</span> Lab</a>
   <nav class="links">
-    <a href="#stuck">つまずき診断</a><a href="#map">単元マップ</a><a href="#routes">目的別ルート</a><a href="#quals">資格</a><a href="#daily">今日の1問</a><a href="#teachers">先生方へ</a>
+    <a href="#stuck">つまずき診断</a><a href="#map">単元マップ</a><a href="#drills">ドリル</a><a href="#routes">目的別ルート</a><a href="#quals">資格</a><a href="#daily">今日の1問</a><a href="#teachers">先生方へ</a>
   </nav>
 </div></header>
 
@@ -272,6 +272,15 @@ a.fbtn:hover{border-color:var(--accent);transform:translateY(-2px)}
     <ul class="lessons" id="lessons"></ul>
     <div class="panel" id="panel" aria-live="polite"></div>
   </div>
+</div></section>
+
+<section id="drills"><div class="wrap">
+  <div class="sec-head"><div>
+    <div class="eyebrow">DRILL</div>
+    <h2>ドリルで腕だめし</h2>
+    <p>4択と○×で、サクサク解ける。授業の復習にも、テスト前の確認にも。</p>
+  </div></div>
+  <div class="quals" id="drillList"></div>
 </div></section>
 
 <section id="routes"><div class="wrap">
@@ -381,7 +390,7 @@ const SUBJECTS=[
  {id:"elec",name:"電磁気",lessons:[
   ["静電気と電子のドラマ",{}],["電流の正体とオームの法則",{}],["直列・並列回路と合成抵抗",{}],["ジュールの法則と電気代",{}],["電流が作る磁場",{}],["モーターの仕組み",{}],["電磁誘導",{}],["交流の正体と実効値",{}],["変圧器・送電・整流・電磁波",{}]]},
  {id:"kajin",name:"科学と人間生活",lessons:[
-  ["生物の多様性と共通性",{d:KD}],["細胞のつくり",{d:KD}],["真核細胞と原核細胞",{d:KD}],["代謝",{d:KD}]]},
+  ["生物の多様性と共通性",{d:KD}],["細胞のつくり",{d:KD}],["真核細胞と原核細胞",{d:KD}],["代謝",{d:KD}],["光合成・呼吸・発酵",{d:KD}],["微生物の種類",{d:KD}],["生態系と微生物",{d:KD}]]},
  {id:"chem",name:"化学基礎",lessons:[
   ["原子・周期表・化学結合",{}],["物質量（mol）とモル質量",{}],["化学反応式とmol",{}],["熱化学方程式",{}]]}
 ];
@@ -405,6 +414,15 @@ const ROUTES=[
   {t:"物質量（mol）とモル質量",to:["chem",1]},{t:"比熱",to:["heat",1]},{t:"静電気と電子のドラマ",to:["elec",0]},{t:"乙4ドリル（物理・化学）",href:"https://sak19lab.github.io/physics/otsu4-drill/"}]}
 ];
 // 資格カード：増やすときはここに1つ足すだけ
+// ドリル一覧：増やすときはここに1つ足すだけ
+const DRILLS=[
+ {lv:"PHYSICS",title:"物理ドリル",desc:"物理基礎の計算と考え方を、単元ごとに練習できます。",
+  chips:["三角比","等加速度直線運動","落下・投射","相対速度","力のつりあい","摩擦力","運動方程式"],rel:"関連する単元：物理の数学・力学",url:DR},
+ {lv:"SCIENCE & LIFE",title:"科学と人間生活ドリル",desc:"生物の分野を、用語の見きわめと○×で確認できます。",
+  chips:["生物の多様性と共通性","細胞のつくり","真核・原核","代謝とATP","光合成・呼吸・発酵","微生物","生態系"],rel:"関連する単元：科学と人間生活",url:KD},
+ {lv:"HAZMAT · CLASS 4",title:"乙4ドリル",desc:"危険物取扱者 乙種第4類の「物理・化学」を練習できます。",
+  chips:["燃焼","消火","引火点・発火点","静電気","mol・反応熱"],rel:"くわしくは「資格にチャレンジ」へ",url:"https://sak19lab.github.io/physics/otsu4-drill/"}
+];
 const QUALS=[
  {lv:"HAZMAT · CLASS 4",title:"危険物取扱者 乙種第4類",desc:"「物理・化学」の分野を、4択と○×で練習できます。最後は本番形式の模試10問で腕だめし。",
   chips:["燃焼のしくみ","消火の理論","引火点・発火点","比重と蒸気比重","比熱・熱膨張","静電気","mol・反応熱","有機化合物"],
@@ -436,6 +454,7 @@ function renderPanel(){
 function renderAll(){renderTabs();renderLessons();renderPanel();try{localStorage.setItem("ktl-cur",JSON.stringify(cur))}catch(e){}}
 $("#stuckList").innerHTML=STUCK.map((s,i)=>`<button data-k="${i}"><span class="say">「${s.say}」</span><span class="go">→ ${s.go}</span></button>`).join("");
 $("#stuckList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const [sub,i]=STUCK[b.dataset.k].to;cur={sub,i};renderAll();$("#map").scrollIntoView({behavior:"smooth"})});
+$("#drillList").innerHTML=DRILLS.map(q=>`<div class="qual"><div class="lv">${q.lv}</div><h3>${q.title}</h3><p>${q.desc}</p><div class="chips">${q.chips.map(c=>`<span>${c}</span>`).join("")}</div><div class="link">${q.rel}</div><a class="go" href="${q.url}" target="_blank" rel="noopener">ドリルを始める</a></div>`).join("");
 $("#qualList").innerHTML=QUALS.map(q=>`<div class="qual"><div class="lv">${q.lv}</div><h3>${q.title}</h3><p>${q.desc}</p><div class="chips">${q.chips.map(c=>`<span>${c}</span>`).join("")}</div><div class="link">${q.rel}</div><a class="go" href="${q.url}" target="_blank" rel="noopener">ドリルを始める</a></div>`).join("");
 $("#routeList").innerHTML=ROUTES.map((r,ri)=>`<div class="route ${r.c}"><h3>${r.title}</h3><div class="for">${r.for}</div><ol>${r.steps.map((s,si)=>`<li><span>${s.to?`<button data-r="${ri}" data-s="${si}">${s.t}</button>`:s.href?`<a href="${s.href}" target="_blank" rel="noopener">${s.t}</a>`:s.t}${s.soon?`<span class="soon">準備中</span>`:""}</span></li>`).join("")}</ol></div>`).join("");
 $("#routeList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const [sub,i]=ROUTES[b.dataset.r].steps[b.dataset.s].to;cur={sub,i};renderAll();$("#map").scrollIntoView({behavior:"smooth"})});
